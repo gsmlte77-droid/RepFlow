@@ -1,0 +1,151 @@
+{% load i18n static %}<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}" dir="{% if request.LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% trans 'FixSoftRepair' %}{% endblock %} - {{ company_name }}</title>
+    
+    <!-- Favicon -->
+    {% if app_config and app_config.favicon %}
+    <link rel="icon" href="{{ app_config.favicon.url }}" type="image/x-icon">
+    {% else %}
+    <link rel="icon" href="{% static 'favicon.ico' %}" type="image/x-icon">
+    {% endif %}
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        secondary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- RTL Support -->
+    {% if request.LANGUAGE_CODE == 'ar' %}
+    <style>
+        [dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+        [dir="rtl"] .text-left {
+            text-align: right !important;
+        }
+        [dir="rtl"] .text-right {
+            text-align: left !important;
+        }
+        [dir="rtl"] .mr-2 {
+            margin-right: 0.5rem !important;
+            margin-left: 0.5rem !important;
+        }
+        [dir="rtl"] .ml-2 {
+            margin-left: 0rem !important;
+            margin-right: 0.5rem !important;
+        }
+        [dir="rtl"] .pr-4 {
+            padding-right: 0 !important;
+            padding-left: 1rem !important;
+        }
+        [dir="rtl"] .pl-4 {
+            padding-left: 0 !important;
+            padding-right: 1rem !important;
+        }
+        [dir="rtl"] .float-left {
+            float: right !important;
+        }
+        [dir="rtl"] .float-right {
+            float: left !important;
+        }
+    </style>
+    {% endif %}
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSRF Token for AJAX -->
+    <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body class="bg-gray-50">
+    <!-- Main Container -->
+    <div class="min-h-screen flex">
+        <!-- Sidebar -->
+        {% block sidebar %}
+        {% include 'includes/sidebar.html' %}
+        {% endblock %}
+        
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col">
+            <!-- Header -->
+            {% block header %}
+            {% include 'includes/header.html' %}
+            {% endblock %}
+            
+            <!-- Page Content -->
+            <main class="flex-1 p-4 md:p-6 lg:p-8">
+                {% block breadcrumbs %}
+                {% include 'includes/breadcrumbs.html' %}
+                {% endblock %}
+                
+                {% block messages %}
+                {% include 'includes/messages.html' %}
+                {% endblock %}
+                
+                {% block content %}
+                {% endblock %}
+            </main>
+            
+            <!-- Footer -->
+            {% block footer %}
+            {% include 'includes/footer.html' %}
+            {% endblock %}
+        </div>
+    </div>
+    
+    <!-- Modals Container -->
+    <div id="modal-container"></div>
+    
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+    
+    {% block scripts %}
+    {% endblock %}
+</body>
+</html>

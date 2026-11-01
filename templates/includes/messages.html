@@ -1,0 +1,15 @@
+{% load i18n %}
+<!-- Messages -->
+{% if messages %}
+<div class="mb-6 space-y-2">
+    {% for message in messages %}
+    <div class="p-4 rounded-lg border {% if message.tags %}alert-{{ message.tags }}{% endif %} {% if 'success' in message.tags %}bg-green-50 border-green-200 text-green-800{% elif 'error' in message.tags %}bg-red-50 border-red-200 text-red-800{% elif 'warning' in message.tags %}bg-yellow-50 border-yellow-200 text-yellow-800{% elif 'info' in message.tags %}bg-blue-50 border-blue-200 text-blue-800{% else %}bg-gray-50 border-gray-200 text-gray-800{% endif %}" role="alert">
+        <div class="flex items-center">
+            <i class="fas {% if 'success' in message.tags %}fa-check-circle{% elif 'error' in message.tags %}fa-exclamation-circle{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'info' in message.tags %}fa-info-circle{% else %}fa-bell{% endif %} mr-2"></i>
+            <span>{{ message }}</span>
+            <button onclick="this.parentElement.parentElement.style.display='none'" class="ml-auto text-lg leading-none">&times;</button>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

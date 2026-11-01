@@ -1,0 +1,129 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FixSoftRepair 1.0\n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: 2024-01-01 00:00+0000\n"
+"Last-Translator: FixSoftRepair Team\n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/models.py:15
+msgid "Administrator"
+msgstr "Administrator"
+
+#: accounts/models.py:16
+msgid "Technician"
+msgstr "Technician"
+
+#: accounts/models.py:17
+msgid "Cashier"
+msgstr "Cashier"
+
+#: accounts/models.py:21
+msgid "Role"
+msgstr "Role"
+
+#: accounts/models.py:27
+msgid "Telephone"
+msgstr "Telephone"
+
+#: accounts/models.py:32
+msgid "Avatar"
+msgstr "Avatar"
+
+#: accounts/models.py:37
+msgid "Active"
+msgstr "Active"
+
+#: accounts/models.py:42
+msgid "Date Created"
+msgstr "Date Created"
+
+#: accounts/models.py:45
+msgid "Date Updated"
+msgstr "Date Updated"
+
+#: accounts/models.py:50
+msgid "User"
+msgstr "User"
+
+#: accounts/models.py:51
+msgid "Users"
+msgstr "Users"
+
+#: config/models.py:25
+msgid "US Dollar"
+msgstr "US Dollar"
+
+#: config/models.py:26
+msgid "Euro"
+msgstr "Euro"
+
+#: config/models.py:27
+msgid "British Pound"
+msgstr "British Pound"
+
+#: config/models.py:28
+msgid "Algerian Dinar"
+msgstr "Algerian Dinar"
+
+#: config/models.py:29
+msgid "Moroccan Dirham"
+msgstr "Moroccan Dirham"
+
+#: config/models.py:30
+msgid "Tunisian Dinar"
+msgstr "Tunisian Dinar"
+
+#: config/models.py:31
+msgid "Saudi Riyal"
+msgstr "Saudi Riyal"
+
+#: config/models.py:32
+msgid "UAE Dirham"
+msgstr "UAE Dirham"
+
+#: config/models.py:33
+msgid "Qatari Riyal"
+msgstr "Qatari Riyal"
+
+#: config/models.py:36
+msgid "Currency"
+msgstr "Currency"
+
+#: config/models.py:40
+msgid "French"
+msgstr "French"
+
+#: config/models.py:41
+msgid "English"
+msgstr "English"
+
+#: config/models.py:42
+msgid "Arabic"
+msgstr "Arabic"
+
+#: templates/base.html:10
+msgid "FixSoftRepair"
+msgstr "FixSoftRepair"
+
+#: templates/base.html:10
+msgid "Professional Repair Workshop Management"
+msgstr "Professional Repair Workshop Management"
+
+#: templates/dashboard/dashboard.html:10
+#: templates/includes/sidebar.html:19
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: templates/includes/header.html:20
+msgid "Search..."
+msgstr "Search..."
+
+#: templates/accounts/login.html:13
+msgid "Login"
+msgstr "Login"

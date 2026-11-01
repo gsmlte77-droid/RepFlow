@@ -1,0 +1,25 @@
+{% load i18n %}
+<!-- Breadcrumbs -->
+{% if breadcrumb_items %}
+<nav class="flex items-center space-x-2 text-sm text-gray-500 mb-6" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-2">
+        <li>
+            <a href="{% url 'dashboard:home' %}" class="text-primary-600 hover:text-primary-800">
+                <i class="fas fa-home"></i>
+            </a>
+        </li>
+        {% for item in breadcrumb_items %}
+        <li>
+            <span class="text-gray-400">{{ item.separator|default:'/' }}</span>
+        </li>
+        <li class="{% if forloop.last %}text-gray-800{% else %}text-primary-600 hover:text-primary-800{% endif %}">
+            {% if not forloop.last %}
+            <a href="{{ item.url }}">{{ item.name }}</a>
+            {% else %}
+            {{ item.name }}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ol>
+</nav>
+{% endif %}

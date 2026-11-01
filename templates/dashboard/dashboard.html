@@ -1,0 +1,313 @@
+{% extends 'base.html' %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Dashboard' %}{% endblock %}
+
+{% block breadcrumbs %}
+{% with breadcrumb_items=[{"name": "Dashboard", "url": ""}] %}
+{{ block.super }}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Dashboard Header -->
+    <div class="bg-white rounded-xl shadow-sm p-6">
+        <h1 class="text-2xl font-bold text-gray-800">{% trans 'Dashboard' %}</h1>
+        <p class="text-gray-500 mt-1">{% trans 'Welcome back!' %} {{ request.user.get_full_name|default:request.user.username }}</p>
+    </div>
+    
+    <!-- Statistics Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <!-- Total Repairs -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{% trans 'Total Repairs' %}</p>
+                    <p class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_repairs }}</p>
+                </div>
+                <div class="h-12 w-12 bg-primary-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-wrench text-primary-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-primary-500" style="width: {{ stats.pending_repairs|div:stats.total_repairs|mul:100 }}%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">{{ stats.pending_repairs }} {% trans 'pending' %}</p>
+        </div>
+        
+        <!-- Total Clients -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{% trans 'Total Clients' %}</p>
+                    <p class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_clients }}</p>
+                </div>
+                <div class="h-12 w-12 bg-green-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-users text-green-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-green-500" style="width: {% if stats.total_clients > 0 %}{{ stats.new_clients_this_month|div:stats.total_clients|mul:100 }}{% else %}0{% endif %}%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">{{ stats.new_clients_this_month }} {% trans 'new this month' %}</p>
+        </div>
+        
+        <!-- Total Revenue -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{% trans 'Total Revenue' %}</p>
+                    <p class="text-3xl font-bold text-gray-800 mt-1">{{ company_currency }} {{ stats.total_revenue|floatformat:2 }}</p>
+                </div>
+                <div class="h-12 w-12 bg-yellow-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-yellow-500" style="width: {% if stats.total_revenue > 0 %}{{ stats.total_paid|div:stats.total_revenue|mul:100 }}{% else %}0{% endif %}%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">{{ company_currency }} {{ stats.total_paid|floatformat:2 }} {% trans 'paid' %}</p>
+        </div>
+        
+        <!-- Outstanding Balance -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{% trans 'Outstanding' %}</p>
+                    <p class="text-3xl font-bold text-red-600 mt-1">{{ company_currency }} {{ stats.total_outstanding|floatformat:2 }}</p>
+                </div>
+                <div class="h-12 w-12 bg-red-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                <div class="h-full bg-red-500" style="width: {% if stats.total_outstanding > 0 and stats.total_revenue > 0 %}{{ stats.total_outstanding|div:stats.total_revenue|mul:100 }}{% else %}0{% endif %}%"></div>
+            </div>
+            <p class="text-xs text-gray-500 mt-2">{{ stats.overdue_invoices }} {% trans 'overdue invoices' %}</p>
+        </div>
+        
+        <!-- Inventory Status -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">{% trans 'Inventory' %}</p>
+                    <p class="text-3xl font-bold text-gray-800 mt-1">{{ stats.total_inventory }}</p>
+                </div>
+                <div class="h-12 w-12 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-boxes text-blue-600 text-xl"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center space-x-2">
+                <span class="h-2 w-2 bg-red-500 rounded-full"></span>
+                <span class="text-xs text-gray-500">{{ stats.out_of_stock_items }} {% trans 'out of stock' %}</span>
+                <span class="h-2 w-2 bg-yellow-500 rounded-full"></span>
+                <span class="text-xs text-gray-500">{{ stats.low_stock_items }} {% trans 'low stock' %}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Charts Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Repairs by Status Chart -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">{% trans 'Repairs by Status' %}</h2>
+            <div class="flex items-center justify-center h-64">
+                <canvas id="repairsByStatusChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Repairs by Device Type Chart -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">{% trans 'Repairs by Device Type' %}</h2>
+            <div class="flex items-center justify-center h-64">
+                <canvas id="repairsByDeviceChart"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Repairs -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">{% trans 'Recent Repairs' %}</h2>
+                <a href="{% url 'repairs:repair_list' %}" class="text-sm text-primary-600 hover:text-primary-800">{% trans 'View All' %}</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left">{% trans 'Ticket' %}</th>
+                            <th class="px-4 py-2 text-left">{% trans 'Client' %}</th>
+                            <th class="px-4 py-2 text-left">{% trans 'Device' %}</th>
+                            <th class="px-4 py-2 text-left">{% trans 'Status' %}</th>
+                            <th class="px-4 py-2 text-right">{% trans 'Date' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for repair in recent_repairs %}
+                        <tr>
+                            <td class="px-4 py-2">
+                                <a href="{% url 'repairs:repair_detail' repair.pk %}" class="text-primary-600 hover:text-primary-800">{{ repair.ticket_number }}</a>
+                            </td>
+                            <td class="px-4 py-2">{{ repair.client.get_display_name }}</td>
+                            <td class="px-4 py-2">{{ repair.get_device_info }}</td>
+                            <td class="px-4 py-2">
+                                <span class="px-2 py-1 rounded-full text-xs {% if repair.statut == 'PENDING' %}bg-gray-100 text-gray-800{% elif repair.statut == 'IN_PROGRESS' %}bg-yellow-100 text-yellow-800{% elif repair.statut == 'READY' %}bg-green-100 text-green-800{% elif repair.statut == 'DELIVERED' %}bg-emerald-100 text-emerald-800{% elif repair.statut == 'CANCELLED' %}bg-red-100 text-red-800{% endif %}">
+                                    {{ repair.get_statut_display }}
+                                </span>
+                            </td>
+                            <td class="px-4 py-2 text-right">{{ repair.date_depot|date:"Y-m-d" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center text-gray-500">{% trans 'No recent repairs' %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Recent Invoices -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">{% trans 'Recent Invoices' %}</h2>
+                <a href="{% url 'billing:invoice_list' %}" class="text-sm text-primary-600 hover:text-primary-800">{% trans 'View All' %}</a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="text-xs text-gray-500 uppercase bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-2 text-left">{% trans 'Invoice' %}</th>
+                            <th class="px-4 py-2 text-left">{% trans 'Client' %}</th>
+                            <th class="px-4 py-2 text-right">{% trans 'Total' %}</th>
+                            <th class="px-4 py-2 text-right">{% trans 'Paid' %}</th>
+                            <th class="px-4 py-2 text-right">{% trans 'Balance' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for invoice in recent_invoices %}
+                        <tr>
+                            <td class="px-4 py-2">
+                                <a href="{% url 'billing:invoice_detail' invoice.pk %}" class="text-primary-600 hover:text-primary-800">{{ invoice.invoice_number }}</a>
+                            </td>
+                            <td class="px-4 py-2">{{ invoice.client.get_display_name }}</td>
+                            <td class="px-4 py-2 text-right">{{ company_currency }} {{ invoice.total|floatformat:2 }}</td>
+                            <td class="px-4 py-2 text-right">{{ company_currency }} {{ invoice.amount_paid|floatformat:2 }}</td>
+                            <td class="px-4 py-2 text-right">
+                                {% if invoice.balance_due > 0 %}
+                                <span class="text-red-600">{{ company_currency }} {{ invoice.balance_due|floatformat:2 }}</span>
+                                {% else %}
+                                <span class="text-green-600">{{ company_currency }} 0.00</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center text-gray-500">{% trans 'No recent invoices' %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+{{ block.super }}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Repairs by Status Chart
+const repairsByStatusCtx = document.getElementById('repairsByStatusChart').getContext('2d');
+const repairsByStatusData = {
+    labels: [{% for item in charts.repairs_by_status %}'{{ item.statut }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+    datasets: [{
+        data: [{% for item in charts.repairs_by_status %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: [
+            '#6B7280', // PENDING
+            '#3B82F6', // DIAGNOSIS
+            '#F59E0B', // IN_PROGRESS
+            '#F97316', // WAITING_PARTS
+            '#8B5CF6', // QUOTATION
+            '#10B981', // READY
+            '#059669', // DELIVERED
+            '#EF4444', // CANCELLED
+            '#DC2626'  // REJECTED
+        ],
+        borderWidth: 1
+    }]
+};
+new Chart(repairsByStatusCtx, {
+    type: 'doughnut',
+    data: repairsByStatusData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    padding: 15,
+                    usePointStyle: true,
+                    pointStyle: 'circle'
+                }
+            }
+        }
+    }
+});
+
+// Repairs by Device Type Chart
+const repairsByDeviceCtx = document.getElementById('repairsByDeviceChart').getContext('2d');
+const repairsByDeviceData = {
+    labels: [{% for item in charts.repairs_by_device %}'{{ item.type_appareil }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+    datasets: [{
+        data: [{% for item in charts.repairs_by_device %}{{ item.count }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+        backgroundColor: [
+            '#3B82F6', // MOBILE
+            '#8B5CF6', // TABLET
+            '#EC4899', // LAPTOP
+            '#F59E0B', // DESKTOP
+            '#EF4444', // AUTO
+            '#10B981', // MOTORCYCLE
+            '#06B6D4', // ELECTRONIC
+            '#F97316', // APPLIANCE
+            '#6B7280', // MOTOR
+            '#9CA3AF'  // OTHER
+        ],
+        borderWidth: 1
+    }]
+};
+new Chart(repairsByDeviceCtx, {
+    type: 'bar',
+    data: repairsByDeviceData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            x: {
+                beginAtZero: true,
+                grid: {
+                    display: false
+                }
+            },
+            y: {
+                grid: {
+                    display: false
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}
